@@ -19,11 +19,11 @@ def provide_cleaned_df(filename):
     clean_data['ydstogo'] = data['ydstogo']
     clean_data['score_differential'] = data['score_differential']
     # clean_data_old['timeout'] = old_data['timeout']
+    #the binary timeout variable harmed precitions more than it helped
 
-    clean_data = clean_data.dropna()
-    # clean_data_old = clean_data_old[(clean_data_old['posteam'] == team)]
-    clean_data = clean_data[(clean_data['play_type'] != 'no_play')]
-    clean_data = clean_data[(clean_data['ydstogo'] != 0)]
+    clean_data = clean_data[(clean_data['ydstogo'] == 0)]
+    # clean_data = clean_data[(clean_data['play_type'] != 'no_play')]
+    clean_data = clean_data[(clean_data['ydstogo'] == 0)]
     return clean_data
 
 
@@ -47,8 +47,9 @@ team = "NE"
 #Getting a model that can predict team plays in the old year
 
 clean_data_old = provide_cleaned_df(oldfile)
-clean_data_old = clean_data_old[(clean_data_old['posteam'] == team)]
+# clean_data_old = clean_data_old[(clean_data_old['posteam'] == team)]
 #the above line can be commented out to train with all teams
+# print(clean_data_old)
 
 y = clean_data_old['play_type']
 X = clean_data_old.drop(['play_type', 'posteam'], axis=1)
