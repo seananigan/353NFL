@@ -42,22 +42,15 @@ oldfile = file2017              #the old year used for training
 newfile = file2018              #the new year used for testing
 old_year = oldfile[-8:-4]       #pulling just the year from the string
 new_year = newfile[-8:-4]       #pulling just the year from the string
-team = "SEA"
+team = "NE"
 
 #Getting a model that can predict team plays in the old year
 
 clean_data_old = provide_cleaned_df(oldfile)
 team_data_old = clean_data_old[(clean_data_old['posteam'] == team)]
-#the above line can be commented out to train with all teams
 
 X = team_data_old.drop(['play_type', 'posteam'], axis=1)
 y = team_data_old['play_type']
-# X_train, X_test, y_train, y_test = train_test_split(X, y)
-
-#Trying to use weights to get a better score. This did not help.
-# weights = [0.0000001, 0.0000001, 0.0000001, 1, 1]
-# weights_matrix = np.tile(weights, (len(X_train.index), 1))
-# print(weights_matrix)
 
 #Trying different models
 gauss_model = GaussianNB()
@@ -72,13 +65,6 @@ model = rf_model
 model.fit(X, y)
 #Random Forest Classifier performs best of the 3 models
 
-# score = model.score(X_test, y_test)
-# print(old_year, team, "score", score)
-
-#The below 3 variables were used to see the kind of predictions the model was making
-# predictions = model.predict(X_test)
-# real = y_test.values
-# real_counts = y_test.value_counts()
 
 #Does this model work to predict new year data?
 
@@ -111,8 +97,7 @@ score_team_new = model.score(X_team_new, y_team_new)
 print("Accuracy of predicting", new_year, team, "plays with", old_year, "overall NFL data:", score_team_new)
 # print("NFL_NE.append(", score_team_new, ")")
 
-#Are we really finding patterns in the team's play, or just football patterns in general?
-#Let's use this model to test all teams in the new year.
+#For fun, now let's test all teams with this data that was gathered from all teams
 
 score_new = model.score(X_new, y_new)
 print("Accuracy of predicting", new_year, "overall NFL plays with", old_year, "overall NFL data:", score_new)
